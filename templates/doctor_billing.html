@@ -1,0 +1,247 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Billing Management - HMS</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@400;500;600&display=swap");
+        :root {
+            --navy: #0b1b2b;
+            --aqua: #19b5a6;
+            --aqua-2: #28c9b9;
+            --mist: rgba(255, 255, 255, 0.14);
+            --line: rgba(255, 255, 255, 0.24);
+            --soft: rgba(255, 255, 255, 0.9);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Work Sans", "Tahoma", sans-serif;
+            color: #fff;
+            background:
+                linear-gradient(115deg, rgba(7, 29, 55, 0.92) 0%, rgba(7, 29, 55, 0.6) 40%, rgba(7, 29, 55, 0.35) 100%),
+                radial-gradient(circle at 10% 20%, rgba(25, 181, 166, 0.35), transparent 55%),
+                url("{% static 'hero.jpg' %}") center/cover no-repeat;
+            padding: 20px;
+        }
+        .wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 16px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--mist);
+            backdrop-filter: blur(10px);
+            margin-bottom: 16px;
+        }
+        h1 {
+            margin: 0;
+            font-family: "Playfair Display", "Georgia", serif;
+            font-size: 34px;
+        }
+        h2 {
+            margin: 0 0 12px;
+            font-family: "Playfair Display", "Georgia", serif;
+            font-size: 26px;
+        }
+        .muted { color: var(--soft); font-size: 14px; }
+        .btn {
+            padding: 9px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .btn-white { background: #fff; color: #0b1b2b; }
+        .btn-ghost { background: transparent; color: var(--soft); border: 1px solid var(--line); }
+        .btn-danger { background: #ffb3b3; color: #3a0a0a; }
+        .btn-aqua { background: var(--aqua); color: #041c1a; }
+        .msg {
+            margin-bottom: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: rgba(25, 181, 166, 0.2);
+            color: #eaffff;
+        }
+        .section {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--mist);
+            backdrop-filter: blur(8px);
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+        .appt-card {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            margin-bottom: 10px;
+        }
+        .appt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+        .appt-title {
+            margin: 0;
+            font-size: 18px;
+        }
+        .badge {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-completed { background: rgba(76, 175, 80, 0.3); color: #b2fab4; }
+        .meta { color: var(--soft); font-size: 13px; margin-bottom: 6px; }
+        .form-row {
+            display: grid;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        label { font-size: 13px; color: var(--soft); margin-bottom: 4px; display: block; }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: inherit;
+        }
+        input[type="number"]::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--aqua);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .bill-info {
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(76, 175, 80, 0.15);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            font-size: 13px;
+            margin: 8px 0;
+            color: #b2fab4;
+        }
+        .actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .empty {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--mist);
+            padding: 14px;
+            color: var(--soft);
+        }
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        @media (max-width: 700px) {
+            .topbar { flex-direction: column; align-items: flex-start; }
+            .appt-header { flex-direction: column; align-items: flex-start; }
+            .action-buttons { flex-direction: column; }
+            .btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="topbar">
+            <div>
+                <h1>Billing Management</h1>
+                <div class="muted">Manage appointment bills</div>
+            </div>
+            <div class="actions">
+                <a class="btn btn-ghost" href="/doctor/">Back to Dashboard</a>
+                <a class="btn btn-danger" href="/logout/">Logout</a>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="msg">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="section">
+            <h2>Create/Update Bills</h2>
+            <p style="color: var(--soft); font-size: 14px; margin-bottom: 16px;">Select a completed appointment to create or update its bill. Patients will be able to pay once a bill is created.</p>
+            
+            {% if completed_appointments %}
+                {% for appt in completed_appointments %}
+                    <div class="appt-card">
+                        <div class="appt-header">
+                            <h3 class="appt-title">Appointment #{{ appt.id }}</h3>
+                            <span class="badge badge-completed">{{ appt.status }}</span>
+                        </div>
+                        <div class="meta">Patient: {{ appt.patient.user.get_full_name|default:appt.patient.user.username }}</div>
+                        <div class="meta">Date: {{ appt.date }} | Time: {{ appt.time }}</div>
+                        <div class="meta">Reason: {{ appt.reason|default:"-" }}</div>
+                        
+                        {% if appt.invoice %}
+                            <div class="bill-info">
+                                ✓ Bill Amount: ₹{{ appt.invoice.amount }}<br/>
+                                Payment Status: {% if appt.invoice.paid %}<span style="color: #b2fab4;">PAID</span>{% else %}<span style="color: #ffb3b3;">PENDING</span>{% endif %}
+                            </div>
+                        {% else %}
+                            <div style="color: var(--soft); font-size: 13px; margin: 8px 0; padding: 8px; background: rgba(255, 255, 255, 0.08); border-radius: 8px;">No bill created yet</div>
+                        {% endif %}
+
+                        <div class="form-row">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="create_bill" />
+                                <input type="hidden" name="appointment_id" value="{{ appt.id }}" />
+                                <label>Bill Amount (in Rs)</label>
+                                <div style="display: flex; gap: 8px;">
+                                    <input 
+                                        type="number" 
+                                        step="0.01" 
+                                        name="amount" 
+                                        placeholder="Enter amount..." 
+                                        value="{% if appt.invoice %}{{ appt.invoice.amount }}{% endif %}"
+                                        required 
+                                        style="flex: 1;"
+                                    />
+                                    <button class="btn btn-aqua" type="submit" style="margin: 0; white-space: nowrap;">{% if appt.invoice %}Update{% else %}Create{% endif %} Bill</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty">No completed appointments to bill. Complete appointments first by confirming them from your dashboard.</div>
+            {% endif %}
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a class="btn btn-ghost" href="/doctor/">← Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,165 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}ClinIQ Admin{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">ClinIQ Administration</a></h1>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    :root {
+        --navy: #0b1b2b;
+        --aqua: #19b5a6;
+        --aqua-2: #28c9b9;
+        --mist: rgba(255, 255, 255, 0.14);
+        --line: rgba(255, 255, 255, 0.18);
+        --card: rgba(255, 255, 255, 0.08);
+        --soft: rgba(255, 255, 255, 0.9);
+    }
+
+    html,
+    body,
+    #container,
+    #content,
+    .dashboard #content {
+        background:
+            linear-gradient(115deg, rgba(7, 29, 55, 0.92) 0%, rgba(7, 29, 55, 0.62) 45%, rgba(7, 29, 55, 0.36) 100%),
+            radial-gradient(circle at 10% 20%, rgba(25, 181, 166, 0.35), transparent 55%),
+            url("{% static 'hero.jpg' %}") center/cover no-repeat fixed !important;
+        color: #ffffff;
+    }
+
+    #container {
+        min-height: 100vh;
+    }
+
+    #header {
+        background: rgba(11, 27, 43, 0.82) !important;
+        border-bottom: 1px solid var(--line);
+        backdrop-filter: blur(8px);
+    }
+
+    #site-name a,
+    #user-tools,
+    #user-tools a,
+    .breadcrumbs,
+    .breadcrumbs a,
+    caption,
+    .module h2,
+    .module caption,
+    .inline-group h2,
+    #content h1,
+    #content h2,
+    #content h3,
+    .object-tools a,
+    th,
+    td,
+    label,
+    .help,
+    p,
+    li,
+    a {
+        color: var(--soft) !important;
+    }
+
+    #content-related,
+    .module,
+    .dashboard .module,
+    #changelist-filter,
+    div.breadcrumbs,
+    .submit-row,
+    .paginator,
+    .results,
+    .form-row,
+    .aligned .form-row,
+    .inline-group,
+    .selector,
+    .selector-available,
+    .selector-chosen {
+        background: var(--mist) !important;
+        border: 1px solid var(--line) !important;
+        border-radius: 12px;
+        backdrop-filter: blur(6px);
+    }
+
+    .module h2,
+    .module caption,
+    .inline-group h2 {
+        background: rgba(25, 181, 166, 0.2) !important;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .button,
+    input[type=submit],
+    input[type=button],
+    .submit-row input,
+    a.button,
+    .object-tools a,
+    .button.default,
+    input[type=submit].default {
+        background: #ffffff !important;
+        color: #0b1b2b !important;
+        border: 1px solid transparent !important;
+        border-radius: 10px;
+    }
+
+    .button:hover,
+    input[type=submit]:hover,
+    input[type=button]:hover,
+    .submit-row input:hover,
+    a.button:hover,
+    .object-tools a:hover,
+    .button.default:hover,
+    input[type=submit].default:hover {
+        background: var(--aqua-2) !important;
+        color: #051b1a !important;
+    }
+
+    input,
+    select,
+    textarea {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid var(--line) !important;
+        color: #ffffff !important;
+        border-radius: 8px;
+    }
+
+    .messagelist li.success,
+    .messagelist li.warning,
+    .messagelist li.error,
+    ul.messagelist li {
+        border-radius: 10px;
+        border: 1px solid var(--line);
+    }
+
+    #nav-sidebar {
+        background: rgba(11, 27, 43, 0.74) !important;
+        border-right: 1px solid var(--line);
+    }
+
+    #nav-sidebar .current-app .section,
+    #nav-sidebar .current-model {
+        background: rgba(25, 181, 166, 0.2) !important;
+    }
+
+    .results table,
+    .results thead th,
+    .results tbody tr,
+    table,
+    thead th,
+    tbody td,
+    tbody th {
+        background: transparent !important;
+        border-color: var(--line) !important;
+    }
+
+    a:hover,
+    #user-tools a:hover,
+    .breadcrumbs a:hover {
+        color: #45ead9 !important;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,358 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Page - HMS</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@400;500;600&display=swap");
+        :root {
+            --navy: #0b1b2b;
+            --aqua: #19b5a6;
+            --aqua-2: #28c9b9;
+            --mist: rgba(255, 255, 255, 0.14);
+            --line: rgba(255, 255, 255, 0.24);
+            --soft: rgba(255, 255, 255, 0.9);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Work Sans", "Tahoma", sans-serif;
+            color: #fff;
+            background:
+                linear-gradient(115deg, rgba(7, 29, 55, 0.92) 0%, rgba(7, 29, 55, 0.6) 40%, rgba(7, 29, 55, 0.35) 100%),
+                radial-gradient(circle at 10% 20%, rgba(25, 181, 166, 0.35), transparent 55%),
+                url("{% static 'hero.jpg' %}") center/cover no-repeat;
+            padding: 20px;
+        }
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 16px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--mist);
+            backdrop-filter: blur(10px);
+            margin-bottom: 16px;
+        }
+        h1 {
+            margin: 0;
+            font-family: "Playfair Display", "Georgia", serif;
+            font-size: 34px;
+        }
+        .muted { color: var(--soft); font-size: 14px; }
+        .btn {
+            padding: 9px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-white { background: #fff; color: #0b1b2b; }
+        .btn-ghost { background: transparent; color: var(--soft); border: 1px solid var(--line); }
+        .btn-danger { background: #ffb3b3; color: #3a0a0a; }
+        .btn-aqua { background: var(--aqua); color: #041c1a; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .stat {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--mist);
+            backdrop-filter: blur(8px);
+            padding: 12px;
+        }
+        .stat h3 { margin: 0; font-size: 15px; color: var(--soft); }
+        .stat strong { display: block; margin-top: 8px; font-size: 28px; }
+        .msg {
+            margin-bottom: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: rgba(25, 181, 166, 0.2);
+            color: #eaffff;
+        }
+        .query {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--mist);
+            backdrop-filter: blur(8px);
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+        .section {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--mist);
+            backdrop-filter: blur(8px);
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+        .section h2 {
+            margin: 0 0 10px;
+            font-family: "Playfair Display", "Georgia", serif;
+            font-size: 26px;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(260px, 1fr));
+            gap: 10px;
+        }
+        .item-card {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .item-title {
+            margin: 0 0 6px;
+            font-size: 18px;
+        }
+        .appt-list {
+            margin: 8px 0 0;
+            padding-left: 18px;
+        }
+        .appt-list li {
+            margin-bottom: 6px;
+            color: var(--soft);
+        }
+        .query h3 { margin: 0 0 8px; }
+        .meta { color: var(--soft); font-size: 13px; margin-bottom: 8px; }
+        .text { margin: 0 0 10px; line-height: 1.5; }
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 72px;
+        }
+        .actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .empty {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--mist);
+            padding: 14px;
+            color: var(--soft);
+        }
+        @media (max-width: 700px) {
+            .topbar { flex-direction: column; align-items: flex-start; }
+            .stats { grid-template-columns: 1fr; }
+            .card-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="topbar">
+            <div>
+                <h1>Admin Page</h1>
+                <div class="muted">Manage contact queries and send replies</div>
+            </div>
+            <div class="actions">
+                <a class="btn btn-aqua" href="/admin/billing-history/">Bill History</a>
+                <a class="btn btn-ghost" href="/">Home</a>
+                <a class="btn btn-white" href="/contact-us/">Contact Form</a>
+                <a class="btn btn-danger" href="/logout/">Logout</a>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <h3>Total Doctors</h3>
+                <strong>{{ doctor_count }}</strong>
+            </div>
+            <div class="stat">
+                <h3>Pending Doctors</h3>
+                <strong>{{ pending_doctor_count }}</strong>
+            </div>
+            <div class="stat">
+                <h3>Total Patients</h3>
+                <strong>{{ patient_count }}</strong>
+            </div>
+            <div class="stat">
+                <h3>Total Appointments</h3>
+                <strong>{{ appointment_count }}</strong>
+            </div>
+            <div class="stat">
+                <h3>Total Queries</h3>
+                <strong>{{ query_count }}</strong>
+            </div>
+            <div class="stat">
+                <h3>Replied Queries</h3>
+                <strong>{{ replied_count }}</strong>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="msg">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="section">
+            <h2>Pending Doctor Approvals</h2>
+            {% if pending_doctors %}
+                <div class="card-grid">
+                    {% for doctor in pending_doctors %}
+                        <div class="item-card">
+                            <h3 class="item-title">{{ doctor.user.get_full_name|default:doctor.user.username }}</h3>
+                            <div class="meta">Email: {{ doctor.user.email|default:"-" }}</div>
+                            <div class="meta">Specialization: {{ doctor.specialization }}</div>
+                            <div class="meta">License: {{ doctor.license_number }}</div>
+                            <div class="actions">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="approve_doctor" />
+                                    <input type="hidden" name="doctor_id" value="{{ doctor.id }}" />
+                                    <button class="btn btn-white" type="submit">Approve Doctor</button>
+                                </form>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="reject_doctor" />
+                                    <input type="hidden" name="doctor_id" value="{{ doctor.id }}" />
+                                    <button class="btn btn-danger" type="submit">Reject Doctor</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty">No pending doctor approvals.</div>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>All Doctors</h2>
+            {% if doctors %}
+                <div class="card-grid">
+                    {% for doctor in doctors %}
+                        <div class="item-card">
+                            <h3 class="item-title">{{ doctor.user.get_full_name|default:doctor.user.username }}</h3>
+                            <div class="meta">Email: {{ doctor.user.email|default:"-" }}</div>
+                            <div class="meta">Specialization: {{ doctor.specialization }}</div>
+                            <div class="meta">License: {{ doctor.license_number }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty">No doctors found.</div>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>All Patients</h2>
+            {% if patients %}
+                <div class="card-grid">
+                    {% for patient in patients %}
+                        <div class="item-card">
+                            <h3 class="item-title">{{ patient.user.get_full_name|default:patient.user.username }}</h3>
+                            <div class="meta">Email: {{ patient.user.email|default:"-" }}</div>
+                            <div class="meta">Age: {{ patient.age|default:"-" }} | DOB: {{ patient.dob|default:"-" }}</div>
+                            <div class="meta">Contact: {{ patient.contact_number|default:"-" }}</div>
+                            <div class="meta"><strong>Appointments:</strong></div>
+                            {% if patient.appointments.all %}
+                                <ul class="appt-list">
+                                    {% for appt in patient.appointments.all %}
+                                        <li>
+                                            {{ appt.date }} {{ appt.time }} | {{ appt.status }} | Dr. {{ appt.doctor.user.get_full_name|default:appt.doctor.user.username }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <div class="meta">No appointments.</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty">No patients found.</div>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>All Appointments</h2>
+            <p style="color: var(--soft); font-size: 14px; margin-bottom: 12px;">Overview of all appointments and their payment status</p>
+
+            {% if appointments %}
+                {% for appt in appointments %}
+                    <div style="border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin-bottom: 10px; background: rgba(255, 255, 255, 0.08);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 10px;">
+                            <h3 style="margin: 0; font-size: 16px;">Appointment #{{ appt.id }}</h3>
+                            <span style="padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; text-transform: uppercase; background: {% if appt.status == 'COMPLETED' %}rgba(76, 175, 80, 0.3); color: #b2fab4;{% elif appt.status == 'CANCELLED' %}rgba(244, 67, 54, 0.3); color: #ffb3b3;{% else %}rgba(255, 193, 7, 0.3); color: #ffeaa7;{% endif %}">{{ appt.status }}</span>
+                        </div>
+                        <div style="color: var(--soft); font-size: 13px; margin-bottom: 6px;">
+                            <strong>Patient:</strong> {{ appt.patient.user.get_full_name|default:appt.patient.user.username }} | 
+                            <strong>Doctor:</strong> Dr. {{ appt.doctor.user.get_full_name|default:appt.doctor.user.username }}
+                        </div>
+                        <div style="color: var(--soft); font-size: 13px; margin-bottom: 6px;">
+                            <strong>Date:</strong> {{ appt.date }} | <strong>Time:</strong> {{ appt.time }}
+                        </div>
+                        {% if appt.invoice %}
+                            <div style="padding: 8px; border-radius: 8px; background: {% if appt.invoice.paid %}rgba(76, 175, 80, 0.15); border: 1px solid rgba(76, 175, 80, 0.3);{% else %}rgba(255, 152, 0, 0.15); border: 1px solid rgba(255, 152, 0, 0.3);{% endif %} font-size: 13px; margin-top: 8px;">
+                                <strong>Bill Amount:</strong> ₹{{ appt.invoice.amount }} | 
+                                <strong>Status:</strong> <span style="{% if appt.invoice.paid %}color: #b2fab4;{% else %}color: #ffc107;{% endif %}">{% if appt.invoice.paid %}PAID{% else %}PENDING{% endif %}</span>
+                            </div>
+                        {% else %}
+                            <div style="padding: 8px; border-radius: 8px; background: rgba(255, 255, 255, 0.08); font-size: 13px; margin-top: 8px; color: var(--soft);">
+                                <strong>No bill created</strong>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty">No appointments found.</div>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>All Queries</h2>
+
+        {% if queries %}
+            {% for query in queries %}
+                <div class="query">
+                    <h3>{{ query.name }}</h3>
+                    <div class="meta">
+                        Age: {{ query.age|default:"-" }} | DOB: {{ query.dob }} | Submitted: {{ query.created_at }}
+                    </div>
+                    <p class="text"><strong>Address:</strong> {{ query.address }}</p>
+                    <p class="text"><strong>Problem:</strong> {{ query.problem }}</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="query_id" value="{{ query.id }}" />
+                        <label for="reply_{{ query.id }}" class="muted">Admin Reply</label>
+                        <textarea id="reply_{{ query.id }}" name="admin_reply">{{ query.admin_reply }}</textarea>
+                        <div class="actions">
+                            <button class="btn btn-white" type="submit">Save Reply</button>
+                        </div>
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty">No contact queries submitted yet.</div>
+        {% endif %}
+        </div>
+    </div>
+</body>
+</html>

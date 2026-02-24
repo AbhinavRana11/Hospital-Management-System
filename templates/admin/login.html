@@ -1,0 +1,116 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% translate 'Admin Login' %}</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@400;500;600&display=swap");
+        :root {
+            --navy: #0b1b2b;
+            --aqua: #19b5a6;
+            --line: rgba(255, 255, 255, 0.24);
+            --soft: rgba(255, 255, 255, 0.9);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Work Sans", "Tahoma", sans-serif;
+            color: #fff;
+            background:
+                linear-gradient(115deg, rgba(7, 29, 55, 0.9) 0%, rgba(7, 29, 55, 0.64) 42%, rgba(7, 29, 55, 0.34) 100%),
+                radial-gradient(circle at 10% 20%, rgba(25, 181, 166, 0.35), transparent 55%),
+                url("{% static 'hero.jpg' %}") center/cover no-repeat;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+        }
+        .card {
+            width: min(460px, 100%);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 26px;
+            background: rgba(255, 255, 255, 0.09);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            margin: 0 0 8px;
+            font-family: "Playfair Display", "Georgia", serif;
+            font-size: 34px;
+        }
+        p { margin: 0 0 20px; color: var(--soft); }
+        .field { margin-bottom: 14px; }
+        label { display: block; margin-bottom: 6px; font-size: 13px; color: var(--soft); }
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            outline: none;
+        }
+        .btn {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-weight: 600;
+            cursor: pointer;
+            background: var(--aqua);
+            color: #05201d;
+            margin-top: 6px;
+        }
+        .error {
+            border: 1px solid rgba(255, 121, 121, 0.45);
+            background: rgba(255, 121, 121, 0.16);
+            color: #ffd4d4;
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 14px;
+            font-size: 13px;
+        }
+        .home-link {
+            display: inline-block;
+            margin-top: 14px;
+            color: var(--soft);
+            text-decoration: none;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Admin Login</h1>
+        <p>Sign in to access hospital administration controls.</p>
+
+        {% if form.errors and not form.non_field_errors %}
+            <div class="error">{% translate 'Please enter correct email/username and password.' %}</div>
+        {% endif %}
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form action="{{ app_path }}" method="post" id="login-form">
+            {% csrf_token %}
+            <div class="field">
+                <label for="id_username">{% translate 'Email or Username' %}</label>
+                {{ form.username }}
+            </div>
+            <div class="field">
+                <label for="id_password">{% translate 'Password' %}</label>
+                {{ form.password }}
+            </div>
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}" />
+            {% endif %}
+            <button class="btn" type="submit">{% translate 'Log in' %}</button>
+        </form>
+        <a class="home-link" href="/">Back to home</a>
+    </div>
+</body>
+</html>

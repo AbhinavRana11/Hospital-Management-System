@@ -1,0 +1,313 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctor Dashboard - HMS</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@400;500;600&display=swap");
+        :root {
+            --navy: #0b1b2b;
+            --aqua: #19b5a6;
+            --aqua-2: #28c9b9;
+            --mist: rgba(255, 255, 255, 0.14);
+            --line: rgba(255, 255, 255, 0.24);
+            --soft: rgba(255, 255, 255, 0.9);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Work Sans", "Tahoma", sans-serif;
+            color: #fff;
+            background:
+                linear-gradient(115deg, rgba(7, 29, 55, 0.92) 0%, rgba(7, 29, 55, 0.6) 40%, rgba(7, 29, 55, 0.35) 100%),
+                radial-gradient(circle at 10% 20%, rgba(25, 181, 166, 0.35), transparent 55%),
+                url("{% static 'hero.jpg' %}") center/cover no-repeat;
+            padding: 20px;
+        }
+        .wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 16px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--mist);
+            backdrop-filter: blur(10px);
+            margin-bottom: 16px;
+        }
+        h1 {
+            margin: 0;
+            font-family: "Playfair Display", "Georgia", serif;
+            font-size: 34px;
+        }
+        h2 {
+            margin: 0 0 12px;
+            font-family: "Playfair Display", "Georgia", serif;
+            font-size: 26px;
+        }
+        .muted { color: var(--soft); font-size: 14px; }
+        .btn {
+            padding: 9px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .btn-white { background: #fff; color: #0b1b2b; }
+        .btn-ghost { background: transparent; color: var(--soft); border: 1px solid var(--line); }
+        .btn-danger { background: #ffb3b3; color: #3a0a0a; }
+        .btn-aqua { background: var(--aqua); color: #041c1a; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .stat {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--mist);
+            backdrop-filter: blur(8px);
+            padding: 12px;
+        }
+        .stat h3 { margin: 0; font-size: 15px; color: var(--soft); }
+        .stat strong { display: block; margin-top: 8px; font-size: 28px; }
+        .msg {
+            margin-bottom: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: rgba(25, 181, 166, 0.2);
+            color: #eaffff;
+        }
+        .section {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--mist);
+            backdrop-filter: blur(8px);
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+        .appt-card {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            margin-bottom: 10px;
+        }
+        .appt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+        .appt-title {
+            margin: 0;
+            font-size: 18px;
+        }
+        .badge {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-scheduled { background: rgba(255, 193, 7, 0.3); color: #ffeaa7; }
+        .badge-completed { background: rgba(76, 175, 80, 0.3); color: #b2fab4; }
+        .badge-cancelled { background: rgba(244, 67, 54, 0.3); color: #ffb3b3; }
+        .meta { color: var(--soft); font-size: 13px; margin-bottom: 6px; }
+        .text { margin: 6px 0; line-height: 1.5; }
+        textarea, input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: inherit;
+            resize: vertical;
+            margin-bottom: 8px;
+        }
+        textarea { min-height: 60px; }
+        .form-row {
+            display: grid;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        label { font-size: 13px; color: var(--soft); margin-bottom: 4px; display: block; }
+        .actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .empty {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--mist);
+            padding: 14px;
+            color: var(--soft);
+        }
+        @media (max-width: 700px) {
+            .topbar { flex-direction: column; align-items: flex-start; }
+            .stats { grid-template-columns: 1fr; }
+            .appt-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="topbar">
+            <div>
+                <h1>Doctor Dashboard</h1>
+                <div class="muted">Welcome, Dr. {{ doctor.user.get_full_name|default:doctor.user.username }}</div>
+            </div>
+            <div class="actions">
+                <a class="btn btn-aqua" href="/doctor/billing/">Billing</a>
+                <a class="btn btn-ghost" href="/">Home</a>
+                <a class="btn btn-danger" href="/logout/">Logout</a>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <h3>Total Appointments</h3>
+                <strong>{{ total_appointments }}</strong>
+            </div>
+            <div class="stat">
+                <h3>Scheduled</h3>
+                <strong>{{ scheduled_count }}</strong>
+            </div>
+            <div class="stat">
+                <h3>Completed</h3>
+                <strong>{{ completed_count }}</strong>
+            </div>
+            <div class="stat">
+                <h3>Cancelled</h3>
+                <strong>{{ cancelled_count }}</strong>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="msg">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="section">
+            <h2>Scheduled Appointments</h2>
+            {% if scheduled_appointments %}
+                {% for appt in scheduled_appointments %}
+                    <div class="appt-card">
+                        <div class="appt-header">
+                            <h3 class="appt-title">Appointment #{{ appt.id }}</h3>
+                            <span class="badge badge-scheduled">{{ appt.status }}</span>
+                        </div>
+                        <div class="meta">Patient: {{ appt.patient.user.get_full_name|default:appt.patient.user.username }}</div>
+                        <div class="meta">Date: {{ appt.date }} | Time: {{ appt.time }}</div>
+                        <div class="meta">Reason: {{ appt.reason|default:"-" }}</div>
+                        
+                        <div class="actions">
+                            <form method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="confirm_appointment" />
+                                <input type="hidden" name="appointment_id" value="{{ appt.id }}" />
+                                <button class="btn btn-white" type="submit">Confirm Appointment</button>
+                            </form>
+                            <form method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="reject_appointment" />
+                                <input type="hidden" name="appointment_id" value="{{ appt.id }}" />
+                                <button class="btn btn-danger" type="submit">Reject Appointment</button>
+                            </form>
+                        </div>
+                        
+                        <div class="form-row">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="create_prescription" />
+                                <input type="hidden" name="appointment_id" value="{{ appt.id }}" />
+                                <label>Diagnosis</label>
+                                <textarea name="diagnosis" placeholder="Enter diagnosis..." required>{% if appt.prescription %}{{ appt.prescription.diagnosis }}{% endif %}</textarea>
+                                <label>Medicines</label>
+                                <textarea name="medicines" placeholder="Enter medicines..." required>{% if appt.prescription %}{{ appt.prescription.medicines }}{% endif %}</textarea>
+                                <label>Notes</label>
+                                <textarea name="notes" placeholder="Additional notes...">{% if appt.prescription %}{{ appt.prescription.notes }}{% endif %}</textarea>
+                                <button class="btn btn-aqua" type="submit">{% if appt.prescription %}Update{% else %}Create{% endif %} Prescription</button>
+                            </form>
+                        </div>
+
+                        <div class="form-row">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="create_bill" />
+                                <input type="hidden" name="appointment_id" value="{{ appt.id }}" />
+                                <label>Bill Amount</label>
+                                <input type="number" step="0.01" name="amount" placeholder="Enter amount..." value="{% if appt.invoice %}{{ appt.invoice.amount }}{% endif %}" required />
+                                <button class="btn btn-aqua" type="submit">{% if appt.invoice %}Update{% else %}Create{% endif %} Bill</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty">No scheduled appointments.</div>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>Completed Appointments</h2>
+            {% if completed_appointments %}
+                {% for appt in completed_appointments %}
+                    <div class="appt-card">
+                        <div class="appt-header">
+                            <h3 class="appt-title">Appointment #{{ appt.id }}</h3>
+                            <span class="badge badge-completed">{{ appt.status }}</span>
+                        </div>
+                        <div class="meta">Patient: {{ appt.patient.user.get_full_name|default:appt.patient.user.username }}</div>
+                        <div class="meta">Date: {{ appt.date }} | Time: {{ appt.time }}</div>
+                        {% if appt.prescription %}
+                            <div class="text"><strong>Diagnosis:</strong> {{ appt.prescription.diagnosis }}</div>
+                            <div class="text"><strong>Medicines:</strong> {{ appt.prescription.medicines }}</div>
+                        {% endif %}
+                        {% if appt.invoice %}
+                            <div class="text"><strong>Bill Amount:</strong> ${{ appt.invoice.amount }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty">No completed appointments.</div>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>Cancelled Appointments</h2>
+            {% if cancelled_appointments %}
+                {% for appt in cancelled_appointments %}
+                    <div class="appt-card">
+                        <div class="appt-header">
+                            <h3 class="appt-title">Appointment #{{ appt.id }}</h3>
+                            <span class="badge badge-cancelled">{{ appt.status }}</span>
+                        </div>
+                        <div class="meta">Patient: {{ appt.patient.user.get_full_name|default:appt.patient.user.username }}</div>
+                        <div class="meta">Date: {{ appt.date }} | Time: {{ appt.time }}</div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty">No cancelled appointments.</div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

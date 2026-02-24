@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us - HMS</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@400;500;600&display=swap");
+        :root {
+            --navy: #0b1b2b;
+            --aqua: #19b5a6;
+            --line: rgba(255, 255, 255, 0.24);
+            --soft: rgba(255, 255, 255, 0.9);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Work Sans", "Tahoma", sans-serif;
+            color: #fff;
+            background: linear-gradient(135deg, #081524 0%, #0f2a3f 60%, #0b1b2b 100%);
+            display: grid;
+            place-items: center;
+            padding: 24px;
+        }
+        .card {
+            width: min(760px, 100%);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 28px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            margin: 0 0 8px;
+            font-family: "Playfair Display", "Georgia", serif;
+            font-size: 36px;
+        }
+        p { margin: 0 0 22px; color: var(--soft); }
+        form { display: grid; gap: 14px; }
+        .row { display: grid; gap: 7px; }
+        .row-grid {
+            display: grid;
+            gap: 14px;
+            grid-template-columns: repeat(3, minmax(120px, 1fr));
+        }
+        label { font-size: 13px; color: var(--soft); }
+        input, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: inherit;
+        }
+        textarea { resize: vertical; }
+        .error { color: #ffd2d2; font-size: 12px; }
+        .msg {
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: rgba(25, 181, 166, 0.2);
+            color: #eaffff;
+            margin-bottom: 12px;
+        }
+        .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn {
+            padding: 10px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            border: none;
+            cursor: pointer;
+        }
+        .primary { background: var(--aqua); color: #041c1a; }
+        .ghost { background: transparent; color: var(--soft); border: 1px solid var(--line); }
+        @media (max-width: 780px) {
+            .row-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Contact Us</h1>
+        <p>Fill this form and admin will review and reply to your query.</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="msg">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="row-grid">
+                <div class="row">
+                    <label for="id_name">Name</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}<div class="error">{{ form.name.errors|striptags }}</div>{% endif %}
+                </div>
+                <div class="row">
+                    <label for="id_age">Age</label>
+                    {{ form.age }}
+                    {% if form.age.errors %}<div class="error">{{ form.age.errors|striptags }}</div>{% endif %}
+                </div>
+                <div class="row">
+                    <label for="id_dob">DOB</label>
+                    {{ form.dob }}
+                    {% if form.dob.errors %}<div class="error">{{ form.dob.errors|striptags }}</div>{% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <label for="id_address">Address</label>
+                {{ form.address }}
+                {% if form.address.errors %}<div class="error">{{ form.address.errors|striptags }}</div>{% endif %}
+            </div>
+            <div class="row">
+                <label for="id_problem">What's the problem?</label>
+                {{ form.problem }}
+                {% if form.problem.errors %}<div class="error">{{ form.problem.errors|striptags }}</div>{% endif %}
+            </div>
+
+            <div class="actions">
+                <button class="btn primary" type="submit">Submit Query</button>
+                <a class="btn ghost" href="/">Back to home</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

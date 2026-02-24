@@ -1,0 +1,359 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Appointment - HMS</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@400;500;600&display=swap");
+        :root {
+            --navy: #0b1b2b;
+            --aqua: #19b5a6;
+            --aqua-2: #28c9b9;
+            --mist: rgba(255, 255, 255, 0.14);
+            --line: rgba(255, 255, 255, 0.24);
+            --soft: rgba(255, 255, 255, 0.9);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Work Sans", "Tahoma", sans-serif;
+            color: #fff;
+            background:
+                linear-gradient(115deg, rgba(7, 29, 55, 0.92) 0%, rgba(7, 29, 55, 0.6) 40%, rgba(7, 29, 55, 0.35) 100%),
+                radial-gradient(circle at 10% 20%, rgba(25, 181, 166, 0.35), transparent 55%),
+                url("{% static 'hero.jpg' %}") center/cover no-repeat;
+            padding: 20px;
+        }
+        .wrap {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        h1 {
+            margin: 0 0 8px;
+            font-family: "Playfair Display", "Georgia", serif;
+            font-size: 42px;
+        }
+        .subtitle {
+            color: var(--soft);
+            font-size: 16px;
+        }
+        .card {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--mist);
+            backdrop-filter: blur(8px);
+            padding: 28px;
+        }
+        .msg {
+            margin-bottom: 16px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: rgba(25, 181, 166, 0.2);
+            color: #eaffff;
+        }
+        .error {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ffb3b3;
+            border-color: rgba(255, 107, 107, 0.5);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--soft);
+            font-size: 14px;
+        }
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--aqua);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .doctor-select {
+            display: grid;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .doctor-option {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .doctor-option:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--aqua);
+        }
+        .doctor-option input[type="radio"] {
+            width: auto;
+            margin-right: 12px;
+            margin-top: 4px;
+        }
+        .doctor-info {
+            flex: 1;
+        }
+        .doctor-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .doctor-detail {
+            font-size: 13px;
+            color: var(--soft);
+            margin-bottom: 2px;
+        }
+        .errorlist {
+            list-style: none;
+            padding: 0;
+            margin: 8px 0 0;
+        }
+        .errorlist li {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ffb3b3;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            border: 1px solid rgba(255, 107, 107, 0.5);
+        }
+        .btn-container {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+        }
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        .btn-primary {
+            background: var(--aqua);
+            color: #041c1a;
+        }
+        .btn-primary:hover {
+            background: var(--aqua-2);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: var(--soft);
+            border: 1px solid var(--line);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--aqua);
+        }
+        .auth-prompt {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            background: rgba(25, 181, 166, 0.1);
+            border: 1px solid var(--line);
+            margin-bottom: 20px;
+        }
+        .auth-prompt p {
+            margin: 0 0 12px;
+            font-size: 14px;
+        }
+        .auth-prompt a {
+            display: inline-block;
+            padding: 10px 16px;
+            background: var(--aqua);
+            color: #041c1a;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 0 6px;
+        }
+        @media (max-width: 600px) {
+            .card { padding: 20px; }
+            h1 { font-size: 32px; }
+            .btn-container { flex-direction: column; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="header">
+            <h1>Book Appointment</h1>
+            <p class="subtitle">Schedule a consultation with our experienced doctors</p>
+        </div>
+
+        {% if not request.user.is_authenticated %}
+            <div class="card">
+                <div class="auth-prompt">
+                    <p>Please log in to book an appointment</p>
+                    <a href="/login/patient/">Patient Login</a>
+                    <a href="/register/patient/">Join as Patient</a>
+                </div>
+            </div>
+        {% else %}
+            <div class="card">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="msg {% if message.tags %}{{ message.tags }}{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="{{ form.specialization.id_for_label }}">{{ form.specialization.label }}</label>
+                        <input 
+                            type="text"
+                            id="{{ form.specialization.id_for_label }}"
+                            name="specialization"
+                            placeholder="Search specialization..."
+                            list="specializations"
+                            value="{{ selected_specialization }}"
+                        />
+                        <datalist id="specializations">
+                            {% for spec in specializations %}
+                                <option value="{{ spec }}">{{ spec }}</option>
+                            {% endfor %}
+                        </datalist>
+                        {% if form.specialization.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.specialization.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ form.doctor.label }}</label>
+                        <div class="doctor-select">
+                            {% if form.doctor.field.queryset %}
+                                {% for choice_value, choice_label in form.doctor.field.choices %}
+                                    <label class="doctor-option" for="id_doctor_{{ forloop.counter }}">
+                                        <input 
+                                            type="radio" 
+                                            id="id_doctor_{{ forloop.counter }}" 
+                                            name="doctor" 
+                                            value="{{ choice_value }}"
+                                            {% if choice_value == form.doctor.value %}checked{% endif %}
+                                        />
+                                        <div class="doctor-info">
+                                            <div class="doctor-name">{{ choice_label }}</div>
+                                            <div class="doctor-detail">Available for consultation</div>
+                                        </div>
+                                    </label>
+                                {% endfor %}
+                            {% else %}
+                                <div style="color: var(--soft); padding: 12px;">No doctors available for selected specialization.</div>
+                            {% endif %}
+                        </div>
+                        {% if form.doctor.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.doctor.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.date.id_for_label }}">{{ form.date.label }}</label>
+                        {{ form.date }}
+                        {% if form.date.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.date.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.time.id_for_label }}">{{ form.time.label }}</label>
+                        {{ form.time }}
+                        {% if form.time.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.time.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.reason.id_for_label }}">{{ form.reason.label }}</label>
+                        {{ form.reason }}
+                        {% if form.reason.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.reason.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="btn-container">
+                        <button type="submit" class="btn btn-primary">Book Appointment</button>
+                        <a href="/patient/" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Handle specialty filter
+        document.addEventListener('DOMContentLoaded', function() {
+            const specializationInput = document.querySelector('input[name="specialization"]');
+            if (specializationInput) {
+                specializationInput.addEventListener('change', function() {
+                    if (this.value) {
+                        window.location.href = '?specialization=' + encodeURIComponent(this.value);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

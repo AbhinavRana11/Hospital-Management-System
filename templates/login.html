@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - HMS</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@400;500;600&display=swap");
+        :root {
+            --navy: #0b1b2b;
+            --aqua: #19b5a6;
+            --aqua-2: #28c9b9;
+            --line: rgba(255, 255, 255, 0.25);
+            --soft: rgba(255, 255, 255, 0.9);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Work Sans", "Tahoma", sans-serif;
+            color: #fff;
+            background: linear-gradient(135deg, #081524 0%, #0f2a3f 60%, #0b1b2b 100%);
+            display: grid;
+            place-items: center;
+            padding: 24px;
+        }
+        .card {
+            width: min(720px, 100%);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            padding: 28px;
+            backdrop-filter: blur(12px);
+        }
+        h1 {
+            margin: 0 0 6px;
+            font-family: "Playfair Display", "Georgia", serif;
+            font-size: 36px;
+        }
+        p {
+            margin: 0 0 20px;
+            color: var(--soft);
+        }
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .option {
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .option h3 {
+            margin: 0 0 8px;
+            font-size: 18px;
+        }
+        .option p {
+            margin: 0 0 14px;
+            font-size: 13px;
+        }
+        .option a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .option .primary { background: var(--aqua); color: #031c1a; }
+        .option .secondary { background: var(--aqua-2); color: #031c1a; }
+        .back {
+            margin-top: 18px;
+            display: inline-flex;
+            color: var(--soft);
+            text-decoration: none;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Choose Login Type</h1>
+        <p>Login as a patient, doctor, or admin to continue.</p>
+        <div class="options">
+            <div class="option">
+                <h3>Login as Patient</h3>
+                <p>Access appointments, prescriptions, and billing history.</p>
+                <a class="primary" href="/login/patient/">Continue</a>
+            </div>
+            <div class="option">
+                <h3>Login as Doctor</h3>
+                <p>Manage consultations, appointments, and treatment records.</p>
+                <a class="secondary" href="/login/doctor/">Continue</a>
+            </div>
+            <div class="option">
+                <h3>Login as Admin</h3>
+                <p>Open custom admin page to review and reply contact queries.</p>
+                <a class="secondary" href="/login/admin/">Continue</a>
+            </div>
+        </div>
+        <a class="back" href="/">Back to home</a>
+    </div>
+</body>
+</html>

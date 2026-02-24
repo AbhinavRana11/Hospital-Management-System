@@ -1,0 +1,221 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Billing History - HMS</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@400;500;600&display=swap");
+        :root {
+            --navy: #0b1b2b;
+            --aqua: #19b5a6;
+            --aqua-2: #28c9b9;
+            --mist: rgba(255, 255, 255, 0.14);
+            --line: rgba(255, 255, 255, 0.24);
+            --soft: rgba(255, 255, 255, 0.9);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Work Sans", "Tahoma", sans-serif;
+            color: #fff;
+            background:
+                linear-gradient(115deg, rgba(7, 29, 55, 0.92) 0%, rgba(7, 29, 55, 0.6) 40%, rgba(7, 29, 55, 0.35) 100%),
+                radial-gradient(circle at 10% 20%, rgba(25, 181, 166, 0.35), transparent 55%),
+                url("{% static 'hero.jpg' %}") center/cover no-repeat;
+            padding: 20px;
+        }
+        .wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 16px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--mist);
+            backdrop-filter: blur(10px);
+            margin-bottom: 16px;
+        }
+        h1 {
+            margin: 0;
+            font-family: "Playfair Display", "Georgia", serif;
+            font-size: 34px;
+        }
+        h2 {
+            margin: 0 0 12px;
+            font-family: "Playfair Display", "Georgia", serif;
+            font-size: 26px;
+        }
+        .muted { color: var(--soft); font-size: 14px; }
+        .btn {
+            padding: 9px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .btn-ghost { background: transparent; color: var(--soft); border: 1px solid var(--line); }
+        .btn-danger { background: #ffb3b3; color: #3a0a0a; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .stat {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--mist);
+            backdrop-filter: blur(8px);
+            padding: 12px;
+        }
+        .stat h3 { margin: 0; font-size: 15px; color: var(--soft); }
+        .stat strong { display: block; margin-top: 8px; font-size: 28px; }
+        .section {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--mist);
+            backdrop-filter: blur(8px);
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+        .invoice-card {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            margin-bottom: 10px;
+        }
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+        .invoice-title {
+            margin: 0;
+            font-size: 16px;
+        }
+        .badge {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-paid { background: rgba(76, 175, 80, 0.3); color: #b2fab4; }
+        .badge-pending { background: rgba(255, 152, 0, 0.3); color: #ffc107; }
+        .meta { color: var(--soft); font-size: 13px; margin-bottom: 4px; }
+        .amount {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(25, 181, 166, 0.15);
+            border-radius: 8px;
+            border-left: 3px solid var(--aqua);
+        }
+        .empty {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--mist);
+            padding: 14px;
+            color: var(--soft);
+        }
+        @media (max-width: 700px) {
+            .topbar { flex-direction: column; align-items: flex-start; }
+            .stats { grid-template-columns: 1fr 1fr; }
+            .invoice-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="topbar">
+            <div>
+                <h1>Billing History</h1>
+                <div class="muted">Payment tracking and financial overview</div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <a class="btn btn-ghost" href="/admin/">Back to Admin</a>
+                <a class="btn btn-danger" href="/logout/">Logout</a>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <h3>Total Revenue</h3>
+                <strong>₹{{ total_all }}</strong>
+            </div>
+            <div class="stat">
+                <h3>Amount Received</h3>
+                <strong>₹{{ total_paid }}</strong>
+            </div>
+            <div class="stat">
+                <h3>Pending Payment</h3>
+                <strong>₹{{ total_pending }}</strong>
+            </div>
+            <div class="stat">
+                <h3>Transactions</h3>
+                <strong>{{ invoices|length }}</strong>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>All Transactions</h2>
+            <p style="color: var(--soft); font-size: 14px; margin-bottom: 16px;">Payment history from all patients and doctors</p>
+            
+            {% if invoices %}
+                {% for invoice in invoices %}
+                    <div class="invoice-card">
+                        <div class="invoice-header">
+                            <h3 class="invoice-title">Invoice #{{ invoice.id }}</h3>
+                            <span class="badge {% if invoice.paid %}badge-paid{% else %}badge-pending{% endif %}">
+                                {% if invoice.paid %}Paid{% else %}Pending{% endif %}
+                            </span>
+                        </div>
+                        <div class="meta">Patient: {{ invoice.appointment.patient.user.get_full_name|default:invoice.appointment.patient.user.username }}</div>
+                        <div class="meta">Doctor: Dr. {{ invoice.appointment.doctor.user.get_full_name|default:invoice.appointment.doctor.user.username }}</div>
+                        <div class="meta">Appointment Date: {{ invoice.appointment.date }} | Time: {{ invoice.appointment.time }}</div>
+                        <div class="meta">Issued: {{ invoice.issued_at|date:"M d, Y H:i" }}</div>
+                        <div class="amount">₹{{ invoice.amount }}</div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty">No transactions yet.</div>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>Payment Summary by Status</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div style="padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: rgba(76, 175, 80, 0.1);">
+                    <div style="color: var(--soft); font-size: 14px; margin-bottom: 8px;">Paid Invoices</div>
+                    <div style="font-size: 24px; font-weight: 600; color: #b2fab4; margin-bottom: 4px;">₹{{ total_paid }}</div>
+                    <div style="color: var(--soft); font-size: 12px;">{{ paid_count }} transactions</div>
+                </div>
+                <div style="padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255, 152, 0, 0.1);">
+                    <div style="color: var(--soft); font-size: 14px; margin-bottom: 8px;">Pending Invoices</div>
+                    <div style="font-size: 24px; font-weight: 600; color: #ffc107; margin-bottom: 4px;">₹{{ total_pending }}</div>
+                    <div style="color: var(--soft); font-size: 12px;">{{ pending_count }} transactions</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a class="btn btn-ghost" href="/admin/">← Back to Admin Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>
