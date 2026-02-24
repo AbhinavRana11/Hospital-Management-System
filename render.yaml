@@ -4,33 +4,49 @@ services:
     runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn HMS.wsgi:application
+    ipAllowList: []
+
     envVars:
+      - key: USE_SQLITE
+        value: "False"
+
+      - key: USE_REDIS
+        value: "True"
+
       - key: DJANGO_SECRET_KEY
         generateValue: true
+
       - key: DEBUG
         value: "False"
+
       - key: ALLOWED_HOSTS
         value: "*"
+
       - key: DB_NAME
         fromDatabase:
           name: hms-postgres
           property: database
+
       - key: DB_USER
         fromDatabase:
           name: hms-postgres
           property: user
+
       - key: DB_PASSWORD
         fromDatabase:
           name: hms-postgres
           property: password
+
       - key: DB_HOST
         fromDatabase:
           name: hms-postgres
           property: host
+
       - key: DB_PORT
         fromDatabase:
           name: hms-postgres
           property: port
+
       - key: REDIS_URL
         fromService:
           type: redis
