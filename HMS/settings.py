@@ -55,7 +55,7 @@ TEMPLATES = [
 ]
 
 # =========================
-# DATABASE CONFIG (IMPORTANT)
+# DATABASE CONFIG
 # =========================
 
 if os.getenv("DATABASE_URL"):
@@ -99,9 +99,23 @@ else:
 
 AUTH_USER_MODEL = 'accounts.User'
 
+# =========================
+# STATIC FILES FIX
+# =========================
+
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+    BASE_DIR / 'images',   # this brings back your old images folder
+]
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# =========================
+# REST FRAMEWORK
+# =========================
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
