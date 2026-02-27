@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Patient Login</title>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@400;500;600&display=swap");
+
         :root {
             --navy: #0b1b2b;
             --aqua: #19b5a6;
             --line: rgba(255, 255, 255, 0.25);
             --soft: rgba(255, 255, 255, 0.9);
         }
-        * { box-sizing: border-box; }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             min-height: 100vh;
@@ -23,6 +29,7 @@
             place-items: center;
             padding: 24px;
         }
+
         .card {
             width: min(720px, 100%);
             background: rgba(255, 255, 255, 0.06);
@@ -31,14 +38,28 @@
             padding: 28px;
             backdrop-filter: blur(12px);
         }
+
         h1 {
             margin: 0 0 6px;
             font-family: "Playfair Display", "Georgia", serif;
             font-size: 34px;
         }
-        p { margin: 0 0 20px; color: var(--soft); }
-        form { display: grid; gap: 14px; }
-        label { font-size: 13px; color: var(--soft); }
+
+        p {
+            margin: 0 0 20px;
+            color: var(--soft);
+        }
+
+        form {
+            display: grid;
+            gap: 14px;
+        }
+
+        label {
+            font-size: 13px;
+            color: var(--soft);
+        }
+
         input {
             width: 100%;
             padding: 10px 12px;
@@ -47,8 +68,18 @@
             background: rgba(255, 255, 255, 0.08);
             color: #fff;
         }
-        .row { display: grid; gap: 8px; }
-        .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+        .row {
+            display: grid;
+            gap: 8px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
         .btn {
             padding: 10px 16px;
             border-radius: 10px;
@@ -58,15 +89,64 @@
             border: none;
             cursor: pointer;
         }
-        .primary { background: var(--aqua); color: #041c1a; }
-        .ghost { background: transparent; color: var(--soft); border: 1px solid var(--line); }
-        .error { color: #ffd2d2; font-size: 12px; }
+
+        .primary {
+            background: var(--aqua);
+            color: #041c1a;
+        }
+
+        .ghost {
+            background: transparent;
+            color: var(--soft);
+            border: 1px solid var(--line);
+        }
+
+        .error {
+            color: #ffd2d2;
+            font-size: 12px;
+        }
+
+        .messages {
+            margin-bottom: 16px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .msg {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 13px;
+            backdrop-filter: blur(4px);
+        }
+
+        .msg.success {
+            background: rgba(25, 181, 166, 0.2);
+            border-color: var(--aqua);
+        }
+
+        .msg.error {
+            background: rgba(255, 100, 100, 0.15);
+            border-color: rgba(255, 100, 100, 0.4);
+        }
     </style>
 </head>
+
 <body>
     <div class="card">
         <h1>Login as Patient</h1>
         <p>Enter your patient account credentials.</p>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="msg {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
         <form method="post">
             {% csrf_token %}
             <div class="row">
@@ -87,4 +167,5 @@
         </form>
     </div>
 </body>
+
 </html>

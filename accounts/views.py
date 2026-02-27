@@ -127,7 +127,9 @@ def login_patient_view(request):
         if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            user = authenticate(request, username=email, password=password)
+            matched_user = User.objects.filter(email__iexact=email).first()
+            login_username = matched_user.username if matched_user else email
+            user = authenticate(request, username=login_username, password=password)
             if user is None:
                 messages.error(request, 'Invalid credentials. Please try again.')
             elif user.role != 'PATIENT':
@@ -149,7 +151,9 @@ def login_doctor_view(request):
         if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            user = authenticate(request, username=email, password=password)
+            matched_user = User.objects.filter(email__iexact=email).first()
+            login_username = matched_user.username if matched_user else email
+            user = authenticate(request, username=login_username, password=password)
             if user is None:
                 messages.error(request, 'Invalid credentials. Please try again.')
             elif user.role != 'DOCTOR':

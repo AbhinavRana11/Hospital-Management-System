@@ -13,6 +13,12 @@ class BaseRegisterForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, min_length=6)
     confirm_password = forms.CharField(widget=forms.PasswordInput, min_length=6)
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email__iexact=email).exists() or User.objects.filter(username__iexact=email).exists():
+            raise forms.ValidationError('A user with this email already exists.')
+        return email
+
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get('password')
@@ -45,6 +51,12 @@ class PatientRegisterForm(BaseRegisterForm):
 class DoctorRegisterForm(BaseRegisterForm):
     specialization = forms.CharField(max_length=120)
     license_number = forms.CharField(max_length=80)
+
+    def clean_license_number(self):
+        license_number = self.cleaned_data.get('license_number')
+        if Doctor.objects.filter(license_number=license_number).exists():
+            raise forms.ValidationError('A doctor with this license number is already registered.')
+        return license_number
 
 
 class LoginForm(forms.Form):

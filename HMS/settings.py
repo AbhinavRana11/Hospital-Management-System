@@ -1,6 +1,9 @@
-from pathlib import Path
 import os
+from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv
+
+load_dotenv()
 import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,6 +13,8 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'dev-secret-key-change-me')
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://*.railway.app').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',

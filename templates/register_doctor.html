@@ -1,3 +1,4 @@
+﻿{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,16 +65,32 @@
         }
         .primary { background: var(--aqua); color: #041c1a; }
         .ghost { background: transparent; color: var(--soft); border: 1px solid var(--line); }
-        .error {
-            color: #ffd2d2;
-            font-size: 12px;
+        .error { color: #ffd2d2; font-size: 12px; }
+        .messages { margin-bottom: 16px; display: grid; gap: 10px; }
+        .msg {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 13px;
+            backdrop-filter: blur(4px);
         }
+        .msg.success { background: rgba(25, 181, 166, 0.2); border-color: var(--aqua); }
+        .msg.error { background: rgba(255, 100, 100, 0.15); border-color: rgba(255, 100, 100, 0.4); }
     </style>
 </head>
 <body>
     <div class="card">
         <h1>Register as Doctor</h1>
         <p>Create your doctor profile to manage care workflows and appointments.</p>
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="msg {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
         <form method="post">
             {% csrf_token %}
             <div class="row">
